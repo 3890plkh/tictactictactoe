@@ -1,0 +1,6 @@
+This is a concept first described to me by Taahaa Qazi when we were in sixth form. We have a tictactoe board which has tictactoe boards as elements.
+(With a quick google search it looks like this is also called ultimate tictactoe).
+
+The goal of the game is to try and win the 'outer' game of tictactoe, but the only way to do this is to win the regular games of tictactoe to claim those spaces as yours.
+Where you place your counters decides which is the next board you play on. For example, if you place your counter on the top middle of the board you are playing on, then the next move is in the board located in top middle of the outer board
+If the board you would have moved to has already been won, then you get a free choice of where to place your next counter.
