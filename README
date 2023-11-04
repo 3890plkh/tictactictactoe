@@ -1,4 +1,4 @@
-This is a concept first described to me by Taahaa Qazi when we were in sixth form. We have a tictactoe board which has tictactoe boards as elements.
+This is a concept first described to me by a friend when we were in sixth form. We have a tictactoe board which has tictactoe boards as elements.
 (With a quick google search it looks like this is also called ultimate tictactoe).
 
 The goal of the game is to try and win the 'outer' game of tictactoe, but the only way to do this is to win the regular games of tictactoe to claim those spaces as yours.
