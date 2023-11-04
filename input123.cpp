@@ -9,7 +9,7 @@ void input123(int& val1, int& val2) {
     // take input for val1 until it is valid
         bool validRow = false;
         while (validRow==false) {
-            std::cout << "Please select the row of the board you want to make a move on (type 1,2 or 3)\n";
+            std::cout << "Please select the row of the board (type 1,2 or 3)\n";
             
             // if non-int input given take input until int is inputted
             while (!(std::cin>>val1)) {
@@ -30,7 +30,7 @@ void input123(int& val1, int& val2) {
         // take input for column until it is valid
         bool validColumn = false;
         while (validColumn==false) {
-            std::cout << "Please select the column of the board you want to make a move on (type 1,2 or 3)\n";
+            std::cout << "Please select the column of the board(type 1,2 or 3)\n";
             // if non-int input given take input until int is inputted
             while (!(std::cin>>val2)) {
                 std::cin.clear();
