@@ -228,7 +228,19 @@ int main() {
                 board1.printBoard();
             } 
             else if (option==4) {
-                std::cout << "This section is still being built\n";
+                std::cout << "====================================\n";
+                std::cout << "The rules are relatively simple.\n"; 
+                std::cout << "Imagine a tic-tac-toe board full of tic-tac-boards.\n";
+                std::cout << "The goal of the game is to win the big game of tic-tac-toe.\n";
+                std::cout << "The way to do this is to win the small games of tic-tac-toe contained on the big board of tic-tac-toe.\n";
+                std::cout << "You win the small games of tic-tac-toe on the big board in the normal way.\n";
+                std::cout << "However, where you make a move on your regular games of tic-tac-toe determines the next board you play on\n";
+                std::cout << "For example, if I make a move in the top right of a board, then the next move is played on the top right board on the big game of tic-tac-toe.\n";
+                std::cout << "If the board you would have been forced to play in by the previous move has been won or drawn, then you get a free choice of board to play on.\n";
+                std::cout << "The game is won when one player wins the regular tic-tac-toe boards on the big board which gives a combination that would win in tic-tac-toe.\n";
+                std::cout << "For example, if noughts wins the top 3 boards on the big board.\n";
+                std::cout << "Those are the basics, now you should be able to play the game.\n";
+                std::cout << "====================================\n";
             }
             else if (option==5) {
                 board1.boardFinished=true;
