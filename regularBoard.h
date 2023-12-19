@@ -2,13 +2,12 @@
 #include <vector>
 #include <limits>
 
-
 // This is our board class - this is our regular tictactoe board
 // variables are the state of the board and the winner and the number of moves and boolean boardFinished
 // class methods are makeMove - making a move, printBoard - output board to screen, and checkWinner - check to see if anyone has won
 // and isBoardFinished - check to see if a draw has occurred
 class board {
-private:
+private: 
     std::vector<std::vector<std::string>> boardState = {{" "," "," "},{" "," "," "},{" "," "," "}};
 public:
     std::string winner = " "; 
@@ -18,6 +17,7 @@ public:
     void printBoard();
     void checkWinner();
     void isBoardFinished();
+    std::string getElement(int row, int col);
 };
 
 // this function allows the player to make a move as long as it is valid
@@ -96,38 +96,37 @@ std::vector<int> board::makeMove(std::string player) {
 
 // this function prints the current state of the board to the screen
 void board::printBoard() {
-        std::cout << boardState[0][0] << "|" << boardState[0][1] << "|"<< boardState[0][2] << "\n";
-        std::cout << "-----\n";
-        std::cout << boardState[1][0] << "|" << boardState[1][1] << "|"<< boardState[1][2] << "\n";
-        std::cout << "-----\n";
-        std::cout << boardState[2][0] << "|" << boardState[2][1] << "|"<< boardState[2][2] << "\n";
+        for (int i=0;i<=2;i++) {
+            //print rows
+            std::cout << boardState[i][0] << "|" << boardState[i][1] << "|"<< boardState[i][2] << "\n";
+            //if not last row, print separation between rows
+            if (i!=2) {
+                std::cout << "-----\n";
+            }
+        }
 }
 
 //checks if someone has won and if so changes the winner variable
 void board::checkWinner() {
-    if (boardState[0][0]==boardState[1][0] && boardState[0][0]==boardState[2][0] && !(boardState[0][0]==" ")) {
-        winner=boardState[0][0];
+    //check columns
+    for (int i=0;i<=2;i++) {
+        if (boardState[0][i]==boardState[1][i] && boardState[0][i]==boardState[2][i] && !(boardState[0][i]==" ")) {
+        winner=boardState[0][i];
+        }
     }
-    else if (boardState[0][0]==boardState[1][1] && boardState[0][0]==boardState[2][2] && !(boardState[0][0]==" ")) {
-        winner=boardState[0][0];
+    //check rows
+    for (int i=0;i<=2;i++) {
+        if (boardState[i][0]==boardState[i][1] && boardState[i][0]==boardState[i][2] && !(boardState[i][0]==" ")) {
+        winner=boardState[i][0];
+        }
     }
-    else if (boardState[0][0]==boardState[0][1] && boardState[0][0]==boardState[0][2] && !(boardState[0][0]==" ")) {
+
+    //diagonals
+    if (boardState[0][0]==boardState[1][1] && boardState[0][0]==boardState[2][2] && !(boardState[0][0]==" ")) {
         winner=boardState[0][0];
-    }
-    else if (boardState[0][1]==boardState[1][1] && boardState[0][1]==boardState[2][1] && !(boardState[0][1]==" ")) {
-        winner=boardState[0][1];
     }
     else if (boardState[0][2]==boardState[1][1] && boardState[0][2]==boardState[2][0] && !(boardState[0][2]==" ")) {
         winner=boardState[0][2];
-    }
-    else if (boardState[0][2]==boardState[1][2] && boardState[0][2]==boardState[2][2] && !(boardState[0][2]==" ")) {
-        winner=boardState[0][2];
-    }
-    else if (boardState[1][0]==boardState[1][1] && boardState[1][0]==boardState[1][2] && !(boardState[1][0]==" ")) {
-        winner=boardState[1][0]; 
-    }
-    else if (boardState[2][0]==boardState[2][1] && boardState[2][0]==boardState[2][2] && !(boardState[2][0]==" ")) {
-        winner=boardState[2][0];
     }
 }
 
@@ -136,4 +135,9 @@ void board::isBoardFinished() {
     if (moves>=9 || winner!= " ") {
         boardFinished=true;
     }
+}
+
+
+std::string board::getElement(int row, int col) {
+    return boardState[row][col];
 }
