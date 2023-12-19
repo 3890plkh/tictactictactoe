@@ -1,8 +1,9 @@
 #include <iostream>
 #include <vector>
+#include <string>
 
-#include "regularBoard.cpp"
-#include "input123.cpp"
+#include "regularBoard.h"
+#include "input123.h"
 
 // this is a concept first described to me by Taahaa Qazi. We have a tictactoe board which has tictactoe boards as element.
 // The goal of the game is to try and win the 'outer' game of tictactoe, but the only way to do this is to win the regular games of tictactoe.
@@ -129,45 +130,60 @@ void bigBoard::printBoard() {
 
 //prints the big board structure
 void bigBoard::printBigBoard() {
-    std::cout << (boardState[0][0]).winner << "|" << (boardState[0][1]).winner << "|"<< (boardState[0][2]).winner << "\n";
-    std::cout << "-----\n";
-    std::cout << (boardState[1][0]).winner << "|" << (boardState[1][1]).winner << "|"<< (boardState[1][2]).winner << "\n";
-    std::cout << "-----\n";
-    std::cout << (boardState[2][0]).winner << "|" << (boardState[2][1]).winner << "|"<< (boardState[2][2]).winner << "\n";
+    //loop through reach row and column of big board
+    for (int i=0;i<=2;i++) {
+        for (int j=0;j<=2;j++) {
+            //for each row of regular boards in each row of big board
+            std::cout << (boardState[i][0]).getElement(j,0) << "|" << (boardState[i][0]).getElement(j,1) << "|" << (boardState[i][0]).getElement(j,2) <<  ":";
+            std::cout << (boardState[i][1]).getElement(j,0) << "|" << (boardState[i][1]).getElement(j,1) << "|" << (boardState[i][1]).getElement(j,2) << ":";
+            std::cout << (boardState[i][2]).getElement(j,0) << "|" << (boardState[i][2]).getElement(j,1) << "|" << (boardState[i][2]).getElement(j,2) << std::endl;
+            //unless we are on the last line separate the rows
+            //different regular boards separated differently
+            if (j==2 && i!=2) {
+                std::cout << "=================\n";
+            }
+            else if (j!=2) {
+                std::cout << "-----------------\n";
+            }
+        }
+    }
 }
 
 // checks if anyone has won the game through checking what combination of regular boards has been won
 void bigBoard::checkWinner() {
-    if (boardState[0][0].winner==boardState[1][0].winner && boardState[0][0].winner==boardState[2][0].winner && !(boardState[0][0].winner=="No Winner")) {
-        winner=boardState[0][0].winner;
+    //check columns
+    for (int i=0;i<=2;i++) {
+        if (boardState[0][i].winner==boardState[1][i].winner && boardState[0][i].winner==boardState[2][i].winner && !(boardState[0][i].winner=="No Winner")) {
+        winner=boardState[0][i].winner;
+        }
     }
-    else if (boardState[0][0].winner==boardState[1][1].winner && boardState[0][0].winner==boardState[2][2].winner && !(boardState[0][0].winner=="No Winner")) {
-        winner=boardState[0][0].winner;
+    //check rows
+    for (int i=0;i<=2;i++) {
+        if (boardState[i][0].winner==boardState[i][1].winner && boardState[i][0].winner==boardState[i][2].winner && !(boardState[i][0].winner=="No Winner")) {
+        winner=boardState[i][0].winner;
+        }
     }
-    else if (boardState[0][0].winner==boardState[0][1].winner && boardState[0][0].winner==boardState[0][2].winner && !(boardState[0][0].winner=="No Winner")) {
+
+    //diagonals
+    if (boardState[0][0].winner==boardState[1][1].winner && boardState[0][0].winner==boardState[2][2].winner && !(boardState[0][0].winner=="No Winner")) {
         winner=boardState[0][0].winner;
-    }
-    else if (boardState[0][1].winner==boardState[1][1].winner && boardState[0][1].winner==boardState[2][1].winner && !(boardState[0][1].winner=="No Winner")) {
-        winner=boardState[0][1].winner;
     }
     else if (boardState[0][2].winner==boardState[1][1].winner && boardState[0][2].winner==boardState[2][0].winner && !(boardState[0][2].winner=="No Winner")) {
         winner=boardState[0][2].winner;
-    }
-    else if (boardState[0][2].winner==boardState[1][2].winner && boardState[0][2].winner==boardState[2][2].winner && !(boardState[0][2].winner=="No Winner")) {
-        winner=boardState[0][2].winner;
-    }
-    else if (boardState[1][0].winner==boardState[1][1].winner && boardState[1][0].winner==boardState[1][2].winner && !(boardState[1][0].winner=="No Winner")) {
-        winner=boardState[1][0].winner; 
-    }
-    else if (boardState[2][0].winner==boardState[2][1].winner && boardState[2][0].winner==boardState[2][2].winner && !(boardState[2][0].winner=="No Winner")) {
-        winner=boardState[2][0].winner;
     }
 }
 
 // if we shouldn't be able to make a move of any of the regular boards, then update boardFinished for big board so we cannot make a move on the big board
 void bigBoard::isBoardFinished() {
-    if ((boardState[0][0]).boardFinished==true && (boardState[1][0]).boardFinished==true && (boardState[2][0]).boardFinished==true && (boardState[0][1]).boardFinished==true && (boardState[1][1]).boardFinished==true && (boardState[2][1]).boardFinished==true && (boardState[0][2]).boardFinished==true && (boardState[1][2]).boardFinished==true && (boardState[2][2]).boardFinished==true) {
-        boardFinished=true;
+    //initially bigboard set to be finished so if we find all regular boards are finished, the big boards will be finished
+    boardFinished=true;
+    for (int i=0;i<=2;i++) {
+        for (int j=0;j<=2;j++){
+            //if there is a board that isn't finished, then clearly bigboard isn't finished
+            if ((boardState[i][j]).boardFinished!=true){
+                boardFinished=false;
+            }
+        }
     }
 }
 
