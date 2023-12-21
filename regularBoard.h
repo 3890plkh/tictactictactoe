@@ -4,7 +4,7 @@
 
 // This is our board class - this is our regular tictactoe board
 // variables are the state of the board and the winner and the number of moves and boolean boardFinished
-// class methods are makeMove - making a move, printBoard - output board to screen, and checkWinner - check to see if anyone has won
+// class methods are makeMove - making a move and checkWinner - check to see if anyone has won
 // and isBoardFinished - check to see if a draw has occurred
 class board {
 private: 
@@ -14,7 +14,6 @@ public:
     bool boardFinished=false;
     int moves=0;
     std::vector<int> makeMove(std::string player);
-    void printBoard();
     void checkWinner();
     void isBoardFinished();
     std::string getElement(int row, int col);
@@ -94,18 +93,6 @@ std::vector<int> board::makeMove(std::string player) {
     return rowColumn;
 }  
 
-// this function prints the current state of the board to the screen
-void board::printBoard() {
-        for (int i=0;i<=2;i++) {
-            //print rows
-            std::cout << boardState[i][0] << "|" << boardState[i][1] << "|"<< boardState[i][2] << "\n";
-            //if not last row, print separation between rows
-            if (i!=2) {
-                std::cout << "-----\n";
-            }
-        }
-}
-
 //checks if someone has won and if so changes the winner variable
 void board::checkWinner() {
     //check columns
@@ -137,7 +124,7 @@ void board::isBoardFinished() {
     }
 }
 
-
+//this is for the main code so we can print the whole board
 std::string board::getElement(int row, int col) {
     return boardState[row][col];
 }

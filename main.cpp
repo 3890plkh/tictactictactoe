@@ -5,18 +5,10 @@
 #include "regularBoard.h"
 #include "input123.h"
 
-// this is a concept first described to me by Taahaa Qazi. We have a tictactoe board which has tictactoe boards as element.
-// The goal of the game is to try and win the 'outer' game of tictactoe, but the only way to do this is to win the regular games of tictactoe.
-// where you place your counters decides which is the next board you play on. 
-// For example, if you place your counter on the top middle of the board you are playing on, then the next move is in the top middle
-// If the board you would have moved to has already been won, then you get a free choice of where to place your next counter
-
-
 //this is our big board class
 // variables are winner and the board state and boardFinished
 // class methods are
 // makeMove -  allows player to make a move
-// printBoard - which prints what is on one of the regular tictactoe boards
 // printBigBoard - which prints the current state of the big board
 // checkWinner - checks if anyone has won
 // isBoardFinished - checks if we have no available moves left, if so game is a draw
@@ -32,7 +24,6 @@ public:
         boardState = {{board1,board2,board3},{board4,board5,board6},{board7,board8,board9}};
     }
     void makeMove(std::string player, int& row, int& column);
-    void printBoard();
     void printBigBoard(); 
     void checkWinner();
     void isBoardFinished();
@@ -48,7 +39,7 @@ void bigBoard::makeMove(std::string player, int& row, int& column) {
     if (row==100 && column==100) {
         int freeRow;
         int freeColumn;
-        //take input for what board to make a move on - do not call row and column variables row and column
+        //take input for what board to make a move on
         //take input for freeRow and freeColumn until it is 1,2,3
         std::cout << "First move so you get a free choice of board\n";
         input123(freeRow,freeColumn);
@@ -60,72 +51,48 @@ void bigBoard::makeMove(std::string player, int& row, int& column) {
         // make the next row these values to force next player to make move in the correct board
         row=rowColumn[0];
         column=rowColumn[1];
+        return;
     }
 
     // if board has been won, player gets free choice of where to put counter
     // needs to be separate from first turn statement as clearly boardState[100][100] is out of array bounds and leads to undefined behaviour
-    else if ((boardState[row-1][column-1]).boardFinished==true) {
-        int freeRow;
-        int freeColumn;
-        //take input for what board to make a move on - do not call row and column variables row and column
-        //take input for freeRow and freeColumn until it is 1,2,3       
+    else if ((boardState[row-1][column-1]).boardFinished==true) {   
         std::cout << "This board has already been won or drawn so you get a free choice of board\n";
 
         // take input for board to play on 
         // make sure that this isn't a board that has been won or drawn
         bool choiceValid=false;
         while (choiceValid==false) {
-             input123(freeRow,freeColumn);
-             if ((boardState[freeRow-1][freeColumn-1]).boardFinished==false) {
+            //take input for row and column until it is 1,2,3 
+             input123(row,column);
+             //if game hasn't finished break out of loop
+             if ((boardState[row-1][column-1]).boardFinished==false) {
                 choiceValid=true;
              }
              else {
                 std::cout << "Please choose another board, this board has been won or drawn so is locked\n";
              }
         }
-
-        // make the move and check if board is won (so in future moves we get free move and on big board we can see this)
-        rowColumn=(boardState[freeRow-1][freeColumn-1]).makeMove(player);
-        (boardState[freeRow-1][freeColumn-1]).checkWinner();
-        (boardState[freeRow-1][freeColumn-1]).isBoardFinished();
-
-        //check if game is won or drawn
-        checkWinner();
-        isBoardFinished();
-        // make the next row  and column these values to force next player to make move in the correct board
-        row=rowColumn[0];
-        column=rowColumn[1];
     }
 
-    // allows player to make a move as long as it is valid on the board
-    // and is the board that the previous player forced this move to be on
-    else {
-        //make move and check winner of board
-        rowColumn=(boardState[row-1][column-1]).makeMove(player);
-        (boardState[row-1][column-1]).checkWinner();
-        (boardState[row-1][column-1]).isBoardFinished();
+    // allows player to make a move on a regular board as long as it is valid on that board
+    // and is the regular board that the previous player forced this move to be on
+    //make move and check winner of board
+    rowColumn=(boardState[row-1][column-1]).makeMove(player);
+    (boardState[row-1][column-1]).checkWinner();
+    (boardState[row-1][column-1]).isBoardFinished();
 
-        //check if game is won or drawn
+    //Only need to check if bigBoard is won when regular board is won
+    if ((boardState[row-1][column-1]).winner!=" ") {
         checkWinner();
-        isBoardFinished();
-        // make the next row  and column these values to force next player to make move in the correct board
-        row=rowColumn[0];
-        column=rowColumn[1];
     }
-}
-
-// this function allows a player to view one of the regular boards in the big board
-// take input for row column until they are both 1,2,3
-// then print the corresponding board
-void bigBoard::printBoard() {
-    int row;
-    int column;
-
-    //take input for row and column until it is 1,2,3
-    input123(row,column);
-    
-    // then print the correct board
-    (boardState[row-1][column-1]).printBoard();
+    //Only need to check if bigBoard is finished when regular board is done
+    if ((boardState[row-1][column-1]).boardFinished==true) {
+        isBoardFinished();
+    }
+    // make the next row  and column these values to force next player to make move in the correct board
+    row=rowColumn[0];
+    column=rowColumn[1];
 }
 
 //prints the big board structure
@@ -153,28 +120,37 @@ void bigBoard::printBigBoard() {
 void bigBoard::checkWinner() {
     //check columns
     for (int i=0;i<=2;i++) {
-        if (boardState[0][i].winner==boardState[1][i].winner && boardState[0][i].winner==boardState[2][i].winner && !(boardState[0][i].winner=="No Winner")) {
+        if (boardState[0][i].winner==boardState[1][i].winner && boardState[0][i].winner==boardState[2][i].winner && !(boardState[0][i].winner==" ")) {
         winner=boardState[0][i].winner;
         }
     }
     //check rows
     for (int i=0;i<=2;i++) {
-        if (boardState[i][0].winner==boardState[i][1].winner && boardState[i][0].winner==boardState[i][2].winner && !(boardState[i][0].winner=="No Winner")) {
+        if (boardState[i][0].winner==boardState[i][1].winner && boardState[i][0].winner==boardState[i][2].winner && !(boardState[i][0].winner==" ")) {
         winner=boardState[i][0].winner;
         }
     }
 
     //diagonals
-    if (boardState[0][0].winner==boardState[1][1].winner && boardState[0][0].winner==boardState[2][2].winner && !(boardState[0][0].winner=="No Winner")) {
+    if (boardState[0][0].winner==boardState[1][1].winner && boardState[0][0].winner==boardState[2][2].winner && !(boardState[0][0].winner==" ")) {
         winner=boardState[0][0].winner;
     }
-    else if (boardState[0][2].winner==boardState[1][1].winner && boardState[0][2].winner==boardState[2][0].winner && !(boardState[0][2].winner=="No Winner")) {
-        winner=boardState[0][2].winner;
+
+    else if (boardState[0][2].winner==boardState[1][1].winner && boardState[0][2].winner==boardState[2][0].winner && !(boardState[0][2].winner==" ")) {
+        winner=boardState[0][2].winner;       
     }
 }
 
-// if we shouldn't be able to make a move of any of the regular boards, then update boardFinished for big board so we cannot make a move on the big board
+// if game finished, then update boardFinished for big board so we cannot make a move on the big board
+// either someone has won big board or all boards are finished with no winner for big board
 void bigBoard::isBoardFinished() {
+    //if someone wins, game should end 
+    if (winner!=" ") {
+        boardFinished=true;
+        return;
+    }
+
+    //now for if all regular boards are finished with no winner for big board, game is finished
     //initially bigboard set to be finished so if we find all regular boards are finished, the big boards will be finished
     boardFinished=true;
     for (int i=0;i<=2;i++) {
@@ -226,11 +202,11 @@ int main() {
 
             // take an option from player until it is valid
             int option;
-            std::cout << "Please select an option: \n1. Make a move \n2. View the whole board \n3. View a board \n4. Rules \n5. Quit Program\n"; 
+            std::cout << "Please select an option: \n1. Make a move \n2. View the whole board \n3. View rules \n4. Quit Program\n"; 
             while (!(std::cin>>option)) {
                 std::cin.clear();
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-                std::cout << "Please type 1,2,3,4 or 5\n";
+                std::cout << "Please type 1,2,3 or 4\n";
             }
             //only 1,2,3,4,5 allowed as inputs
             if (option==1) {
@@ -241,9 +217,6 @@ int main() {
                 board1.printBigBoard();
             }
             else if (option==3) {
-                board1.printBoard();
-            } 
-            else if (option==4) {
                 std::cout << "====================================\n";
                 std::cout << "The rules are relatively simple.\n"; 
                 std::cout << "Imagine a tic-tac-toe board full of tic-tac-boards.\n";
@@ -258,9 +231,8 @@ int main() {
                 std::cout << "Those are the basics, now you should be able to play the game.\n";
                 std::cout << "====================================\n";
             }
-            else if (option==5) {
+            else if (option==4) {
                 board1.boardFinished=true;
-                break;
             }
             else {
                 std::cout << "That is not a valid option \n";
@@ -271,7 +243,7 @@ int main() {
     //once game has been won, congratulate player or state draw has been achieved.
     board1.printBigBoard();
     if (board1.winner!=" ") {
-        std::cout << "Congratulations to " << currentPlayer << "\n";
+        std::cout << "Congratulations to " << board1.winner << "\n";
     }
     else {
         std::cout << "Draw\n";
