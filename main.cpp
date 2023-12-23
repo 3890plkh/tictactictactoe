@@ -232,6 +232,7 @@ int main() {
                 std::cout << "====================================\n";
             }
             else if (option==4) {
+                moveFinished=true;
                 board1.boardFinished=true;
             }
             else {
